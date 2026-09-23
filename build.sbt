@@ -1,6 +1,6 @@
 ThisBuild / scalaVersion := "3.3.4"
 ThisBuild / organization := "cloud.anota"
-ThisBuild / version      := "1.0.0"
+ThisBuild / version      := "2.0.0"
 
 lazy val root = (project in file("."))
   .settings(
