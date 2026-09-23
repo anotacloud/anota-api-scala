@@ -144,8 +144,20 @@ class AnotaClient(apiKey: String, baseUrl: String = "https://anota.cloud/api/v1"
     request("POST", s"/forms/from-template/$templateId")
 
   // ----- webhooks -----
+  /**
+   * Lists a form's webhooks. Each row has id, url, events, enabled, secretHint and secretNote.
+   * The full signing secret is never returned here: secretHint is a masked form
+   * ("whsec_…" + last 4 characters, or just "whsec_…" for short secrets) that identifies
+   * which secret a receiver holds, and secretNote explains the show-once rule. To replace a
+   * lost secret, delete the webhook and add it again.
+   */
   def listWebhooks(formId: String): String = request("GET", s"/forms/$formId/webhooks")
 
+  /**
+   * Registers a webhook URL that receives submission.created events. The response
+   * (id, formId, url, secret, note) is the ONLY place the full signing secret appears:
+   * store it now, it cannot be read back later (listWebhooks shows only secretHint).
+   */
   def addWebhook(formId: String, url: String): String =
     request("POST", s"/forms/$formId/webhooks", Some(s"""{"url":${jsonString(url)}}"""))
 
